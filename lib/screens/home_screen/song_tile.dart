@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../styles&colors/icon_gradient.dart';
 
-class SongTile extends StatefulWidget {
+class SongTile extends StatelessWidget {
   SongTile({
     Key? key,
     required this.liked,
@@ -21,11 +21,6 @@ class SongTile extends StatefulWidget {
   Function()? function;
 
   @override
-  State<SongTile> createState() => _SongTileState();
-}
-
-class _SongTileState extends State<SongTile> {
-  @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: ClipRRect(
@@ -33,12 +28,12 @@ class _SongTileState extends State<SongTile> {
         borderRadius: BorderRadius.circular(5),
         child: SizedBox.fromSize(
           size: const Size.fromRadius(25),
-          child: widget.songImage,
+          child: songImage,
           
         ),
       ),
       title: Text(
-        widget.title,
+        title,
         // overflow: TextOverflow.fade,
         maxLines: 1,
         style: const TextStyle(
@@ -47,7 +42,7 @@ class _SongTileState extends State<SongTile> {
         ),
       ),
       subtitle: Text(
-        widget.subtitle,
+        subtitle,
         overflow: TextOverflow.fade,
         maxLines: 1,
       ),
@@ -59,7 +54,7 @@ class _SongTileState extends State<SongTile> {
         ), */
             IconButton(
           onPressed: () {},
-          icon: widget.liked == false
+          icon: liked == false
               ? const Icon(
                   Icons.favorite_outline,
                   color: Colors.black,
@@ -73,7 +68,7 @@ class _SongTileState extends State<SongTile> {
                 ),
         ),
       ),
-      onTap: widget.function,
+      onTap: function,
     );
   }
 }
