@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
+import 'package:heart_beatz/controllers/home_controller.dart';
 import 'package:heart_beatz/objects.dart';
 import 'package:heart_beatz/screens/favourite_song/favourite_screens.dart';
 import 'package:heart_beatz/screens/home_screen/song_tile.dart';
@@ -9,40 +10,27 @@ import 'package:heart_beatz/screens/home_screen/song_tile.dart';
 import 'package:heart_beatz/styles&colors/scroll_behaviour.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../background&miniplayer/miniplayer.dart';
 import '../../styles&colors/icon_gradient.dart';
 import '../player_screen/player_screen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  HomePage({Key? key}) : super(key: key);
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final OnAudioQuery audioQuery = OnAudioQuery();
-  final AudioPlayer audioPlayer = AudioPlayer();
+  final homeController = Get.put(HomeController());
 
   playSong(String? uri) {
     try {
-      audioPlayer.setAudioSource(
+      homeController.audioPlayer.setAudioSource(
         AudioSource.uri(
           Uri.parse(uri!),
         ),
       );
-      audioPlayer.play();
+      homeController.audioPlayer.play();
     } on Exception {
       log('error parsing song');
     }
-  }
-
-  @override
-  void initState() {
-    requestPermission();
-    super.initState();
   }
 
   @override
@@ -180,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                           height: 10,
                         ),
                         FutureBuilder<List<SongModel>>(
-                          future: audioQuery.querySongs(
+                          future: homeController.audioQuery.querySongs(
                             sortType: null,
                             orderType: OrderType.ASC_OR_SMALLER,
                             uriType: UriType.EXTERNAL,
@@ -223,7 +211,7 @@ class _HomePageState extends State<HomePage> {
                                     Get.to(
                                       () => PlayerScreen(
                                         songmodal: items.data![index],
-                                        audioPlayer: audioPlayer,
+                                        audioPlayer: homeController.audioPlayer,
                                       ),
                                       transition: Transition.downToUp,
                                       duration: const Duration(
@@ -256,8 +244,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-void requestPermission() {
-  Permission.storage.request();
 }
